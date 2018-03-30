@@ -9,6 +9,7 @@ enum Command {
     Quit,
     Unknown,
     Uci,
+    IsReady,
 }
 
 impl Command {
@@ -16,6 +17,7 @@ impl Command {
         match command.trim(){
             "quit" => Command::Quit,
             "uci" => Command::Uci,
+            "isready" => Command::IsReady,
             other => {
                 warn!("Unkown Command: {}", other);
                 Command::Unknown
@@ -34,13 +36,14 @@ impl Command {
         match *self{
             Command::Quit => "",
             Command::Unknown => "",
-            Command::Uci => "id name Luci\nid author Gunnar Klämke, Markus Klein\nuciok\n"
+            Command::Uci => "id name Luci\nid author Gunnar Klaemke, Markus Klein\nuciok\n",
+            Command::IsReady => "readyok\n"
         }
     }
 }
 
 fn main() {
-    simple_logging::log_to_file("luci.log", log::LevelFilter::Info).unwrap();
+    simple_logging::log_to_file("luci.log", log::LevelFilter::Debug).unwrap();
     info!("Start");
     let mut command = String::new();
     loop {
