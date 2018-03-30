@@ -1,0 +1,8 @@
+[package]
+name = "luci"
+version = "0.1.0"
+authors = ["gunnar"]
+
+[dependencies]
+log = "0.4.1"               # A lightweight logging facade for Rust
+simple-logging = "2.0.1"    # A simple logger for the log facade
