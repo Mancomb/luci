@@ -56,11 +56,30 @@ where
     fn next(&mut self) -> Option<Command> {
         self.buffer.clear();
         match self.read.read_line(&mut self.buffer) {
+            Ok(0) => {
+                info!("Encountered EOF");
+                None
+            }
             Ok(_) => Some(Command::from_str(&self.buffer)),
             Err(e) => {
                 error!("Error reading command: {}", e);
                 None
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn command_iterator() {
+        let input = b"uci\nisready\nfoo\nquit\n";
+        let commands: Vec<_> = CommandIt::new(&input[..]).collect();
+        use Command::*;
+        let expected = vec![Uci, IsReady, Unknown, Quit];
+        assert_eq!(expected, commands);
     }
 }
