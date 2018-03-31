@@ -54,6 +54,7 @@ where
 {
     type Item = Command;
     fn next(&mut self) -> Option<Command> {
+        self.buffer.clear();
         match self.read.read_line(&mut self.buffer) {
             Ok(_) => Some(Command::from_str(&self.buffer)),
             Err(e) => {
