@@ -1,3 +1,6 @@
 
 /target/
 **/*.rs.bk
+
+# Do not commit temporary log files from debugging
+luci.log
