@@ -1,33 +1,39 @@
 use std::io;
 
 /// UCI Command send from the GUI to the chess engine
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Command {
     Quit,
     Unknown,
     Uci,
+    Position {
+        fen: Option<String>,
+        moves: Vec<String>,
+    },
+    Go,
     IsReady,
 }
 
 impl Command {
     fn from_str(command: &str) -> Command {
-        match command.trim() {
+        let mut token = command.split_whitespace();
+        match token.next().unwrap() {
             "quit" => Command::Quit,
             "uci" => Command::Uci,
             "isready" => Command::IsReady,
-            other => {
-                warn!("Unkown Command: {}", other);
+            "go" => Command::Go,
+            "position" => Command::Position {
+                fen: if token.next().unwrap() == "fen" {
+                    Some(token.next().unwrap().to_owned())
+                } else {
+                    None
+                },
+                moves: token.map(str::to_owned).collect(),
+            },
+            _ => {
+                warn!("Unkown Command: {}", command);
                 Command::Unknown
             }
-        }
-    }
-
-    pub fn answer(&self) -> &'static str {
-        match *self {
-            Command::Quit => "",
-            Command::Unknown => "",
-            Command::Uci => "id name Luci\nid author Gunnar Klaemke, Markus Klein\nuciok\n",
-            Command::IsReady => "readyok\n",
         }
     }
 }

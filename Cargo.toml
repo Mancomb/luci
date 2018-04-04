@@ -6,3 +6,5 @@ authors = ["gunnar"]
 [dependencies]
 log = "0.4.1"               # A lightweight logging facade for Rust
 simple-logging = "2.0.1"    # A simple logger for the log facade
+pleco = "0.3.11"          # A blazingly-fast chess library
+rand = "0.5.0-pre.0"            # Random number generators and other randomness functionality.
